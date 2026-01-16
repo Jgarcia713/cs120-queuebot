@@ -11,7 +11,6 @@ If you don't know where to run the bot, try running it on [Lectura](#running-the
 
 Here are some notes about things I wanted to do but didn't get around to finishing it:
 
-- The `py-cord` dependency should probably be updated (need to check for breaking changes)
 - `test/` contains unit test cases which are out of date and likely need to be redone
 - `README.md` should probably be split into multiple separate files and put into a `docs/` directory
 - The bot should be able to reply to a specific message instead of @ing the user in a new message (example can be found in [reply_to_msg.py](reply_to_msg.py))
@@ -52,17 +51,16 @@ Here are some notes about things I wanted to do but didn't get around to finishi
 Before configuring the bot, it needs to be added to the appropriate discord server.
 1. Go to [Discord's developer portal](https://discord.com/developers/applications) and create a new application (top-right button).  
 ![Picture of the Developer Portal](imgs/connecting-1.jpg)
-2. Under the `General Information tab`, take a note of the Client ID as it will be used in step 5  
+2. Under the `OAuth2 tab`, take a note of the Client ID as it will be used in step 5  
 ![](imgs/connecting-2.jpg)
-3. On the left panel, click the `Bot` category then the `Add a Bot` button to convert the application to a bot account  
-![](imgs/connecting-3.jpg)
-4. Name it, give it a profile picture, etc.
+3. On the left panel, click the `Bot` category then name it, give it a profile picture, etc. Scroll down and then: 
      - Enable the "Server Members Intent" option under the "Privileged Gateway Intents"
          if you intend on enabling the config values [`CHECK_VOICE_WAITING`](#modifying-the-config) or [`ALERT_ON_FIRST_JOIN`](#modifying-the-config)
-![](imgs/connecting-4.jpg)
-5. Obtain your bot's Token by clicking the `Copy` button and save it for future reference (referred to as `SECRET_TOKEN` within the [configuration](#modifying-the-config) section).  
+     - Enable the "Message Content Intent" option as well so that the bot can read messages that are sent in [`LISTEN_CHANNELS`](#modifying-the-config)
+![](imgs/connecting-3.jpg)
+4. Obtain your bot's Token by clicking the `Reset Token` button and save it for future reference (referred to as `SECRET_TOKEN` within the [configuration](#modifying-the-config) section).  
 **NOTE: The token is effectively your bot's password. Keep it secure and do not share it.**  
-![](imgs/connecting-5.jpg)
+![](imgs/connecting-4.jpg)
 5. Open the following link in your preferred browser and after changing the `client_id` parameter in the url with the Client ID you saved from step 2
 ```bash
 # Swap out REPLACE_WITH_YOUR_CLIENT_ID with the correct Client ID from step 2
@@ -86,24 +84,24 @@ The bot can be run like a normal command line application or within a Docker con
 0. Ensure you have Python 3.7+ installed
 1. Clone/Download this repository
 2. Extract and `cd` into the repo folder
-3. Create a Python virtual environment (skip if on lectura since it doesn't have the required package)
-   - `py -3 -m venv venv`
+3. Create a Python virtual environment
+   - `python3 -m venv venv`
    - On Linux, You may need to install the `python3-venv` package for this to work
 4. Activate the virtual environment
    - Windows: `venv\Scripts\activate.bat`
    - Linux: `source venv/bin/activate`
    - Once activated, `python` and `pip` will point to the virtual environment executables
 5. Upgrade virtual environment pip
-   - `python -m pip install --upgrade pip`
+   - `python3 -m pip install --upgrade pip`
 6. Install queuebot required packages
    - `pip install -r requirements-prod.txt`
-7. Generate `config.json` by running the bot for the first time
-   - `python queuebot.py`
+7. Generate `config.json` by copying the `config.mockup.json`
+   - `cp config.mockup.json config.json`
 8. Move on to [Modifying the Config](#modifying-the-config)
 
 #### Starting the Bot
 
-Once the project is set up, you simply need to activate the python virtual environment ([see step 4 above](#project-setup)) then run the program with `python queuebot.py`
+Once the project is set up, you simply need to activate the python virtual environment ([see step 4 above](#project-setup)) then run the program with `python3 src/queuebot.py`
 
 ### Running with Docker
 
@@ -136,11 +134,12 @@ docker pull docker.pkg.github.com/benperumala/cs120-queuebot/queuebot:latest
 |-----------------------|------|--------------|
 | SECRET_TOKEN          | String | Discord Token which the bot uses for authentication (see [Creating Discord Bot](#creating-discord-bot) on how to get it). |
 | TA_ROLES              | List | A list of discord roles which signify TAs/Instructors. Users with any of these roles can run TA commands. |
-| LISTEN_CHANNELS       | List | A list of text channels which the bot will listen in for queries. |
-| CHECK_VOICE_WAITING   | Boolean | When enabled, the bot will only allow people to join the queue when they have joined a voice channel (specified with `VOICE_WAITING` option). |
+| TEXT_ROLE_MANAGEMENT  | String | A discord role which signifies the QueueBot admin. Users with any of these roles can run TA commands. |
+| TEXT_LISTENS       | List | A list of text channels which the bot will listen in for queries. |
+| CHECK_VOICE_WAITING   | String | Boolean "true" or "false". When enabled, the bot will only allow people to join the queue when they have joined a voice channel (specified with `VOICE_WAITING` option). |
 | VOICE_WAITING         | String | Specifies which voice channel students will join while they wait for a TA to become available. Does not need to be populated if `CHECK_VOICE_WAITING` is False. |
-| ALERT_ON_FIRST_JOIN   | Boolean | Alert available TAs when somone first joins the queue (Only TAs with 0 students in the same room will be notified)  |
-| ALERTS_CHANNEL        | String | Text channel the bot will send alerts in. Currently, `ALERT_ON_FIRST_JOIN` is the only item to create alerts.  |
+| ALERT_ON_FIRST_JOIN   | String | Boolean "true" or "false". Alert available TAs when somone first joins the queue (Only TAs with 0 students in the same room will be notified)  |
+| TEXT_ALERT        | String | Text channel the bot will send alerts in. Currently, `ALERT_ON_FIRST_JOIN` is the only item to create alerts.  |
 | VOICE_OFFICES         | List | Specifies the channels to search for available TAs. TAs in rooms without any students will be notified if someone enters the queue. Does not need to be specified when `ALERT_ON_FIRST_JOIN` is False. |
 
 #### Example Config
@@ -155,11 +154,11 @@ Since `ALERT_ON_FIRST_JOIN` is enabled, the bot will check voice rooms `Office H
 {
     "SECRET_TOKEN": "[YOUR SECRET TOKEN HERE]",
     "TA_ROLES": ["UGTA"],
-    "LISTEN_CHANNELS": ["join-queue"],
-    "CHECK_VOICE_WAITING": "True",
+    "TEXT_LISTENS": ["join-queue"],
+    "CHECK_VOICE_WAITING": "true",
     "VOICE_WAITING": "waiting-room",
-    "ALERT_ON_FIRST_JOIN": "True",
-    "ALERTS_CHANNEL": "queue-alerts",
+    "ALERT_ON_FIRST_JOIN": "true",
+    "TEXT_ALERT": "queue-alerts",
     "VOICE_OFFICES": ["Office Hours Room 1", "Office Hours Room 2"]
 }
 ```
@@ -174,7 +173,8 @@ The bot has two permission levels: `Everyone` and `TA`. Commands with the `Every
 |--------------------|----------|--------------|
 | `!q help`          | Everyone | Sends a Direct Message to the user which lists commands they can run |
 | `!q ping`          | Everyone | Bot replies with `Pong!`. Used to ensure both is receving/sending messages |
-| `!q join`          | Everyone | Adds the user who ran the command to the queue |
+| `!q join`          | Everyone | Adds the user who ran the command to the queue online |
+| `!q join-inpseron` | Everyone | Adds the user who ran the command to the queue in person |
 | `!q leave`         | Everyone | Removes the user who ran the command from the queue |
 | `!q position`      | Everyone | Responds with the number of people in the queue who are in front of the person who ran the command |
 | `!q list`          | Everyone | Lists the next 10 people within the queue |
@@ -193,9 +193,11 @@ Assuming the code is already on the system, the `screen` command can be used to 
 ```bash
 # Create a new screen
 screen -S QueueBot
-cd <path/to/queuebot/code>
+cd <path/to/repository/directory>
+# Activate the virtual environment
+source source venv/bin/activate
 # Run the bot
-python3 queuebot.py
+python3 src/queuebot.py
 ```
 
 To "detach" from the screen, press `Ctrl-A-D`. This will keep the process running in the background.  
