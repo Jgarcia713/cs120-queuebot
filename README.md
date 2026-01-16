@@ -174,7 +174,7 @@ The bot has two permission levels: `Everyone` and `TA`. Commands with the `Every
 | `!q help`          | Everyone | Sends a Direct Message to the user which lists commands they can run |
 | `!q ping`          | Everyone | Bot replies with `Pong!`. Used to ensure both is receving/sending messages |
 | `!q join`          | Everyone | Adds the user who ran the command to the queue online |
-| `!q join-inpseron` | Everyone | Adds the user who ran the command to the queue in person |
+| `!q join-inperson` | Everyone | Adds the user who ran the command to the queue in person |
 | `!q leave`         | Everyone | Removes the user who ran the command from the queue |
 | `!q position`      | Everyone | Responds with the number of people in the queue who are in front of the person who ran the command |
 | `!q list`          | Everyone | Lists the next 10 people within the queue |
@@ -195,7 +195,7 @@ Assuming the code is already on the system, the `screen` command can be used to 
 screen -S QueueBot
 cd <path/to/repository/directory>
 # Activate the virtual environment
-source source venv/bin/activate
+source venv/bin/activate
 # Run the bot
 python3 src/queuebot.py
 ```
