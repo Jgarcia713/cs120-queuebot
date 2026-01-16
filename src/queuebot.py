@@ -23,7 +23,7 @@ import sys
 import logging
 import logging.handlers
 import asyncio
-import discord  # This is defined by py-cord (referenced as discord.py in codebase)
+import discord  
 from datetime import datetime
 import constants
 
@@ -59,6 +59,7 @@ class QueueBot(discord.Client):
         intents.dm_messages = False
         intents.invites = False
         intents.messages = True
+        intents.message_content = True
 
         # Cache voice channels only if queuebot checks voice channel state
         intents.members = True if config.CHECK_VOICE_WAITING or config.ALERT_ON_FIRST_JOIN else False
