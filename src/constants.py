@@ -2,7 +2,8 @@
 MSG_HELP = {
             "STUDENT": """__STUDENT COMMANDS:__
 > `!q help` - Get this help message
-> `!q join`  - Join the queue (ONLINE aka TA will assist you in via Discord screen share)
+> `!q join`  - Join the queue (ONLINE aka TA will assist you via Discord screen share)
+> `!q join-inperson`  - Join the queue (IN-PERSON aka TA will assist you on your own computer)
 > `!q leave` - Leave the queue
 > `!q position` - See how many people are in front of you
 > `!q list` - Get a list of the next 10 people in line""",
