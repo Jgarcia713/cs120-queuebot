@@ -50,17 +50,17 @@ Here are some notes about things I wanted to do but didn't get around to finishi
 
 Before configuring the bot, it needs to be added to the appropriate discord server.
 1. Go to [Discord's developer portal](https://discord.com/developers/applications) and create a new application (top-right button).  
-![Picture of the Developer Portal](imgs/connecting-1.jpg)
+![Picture of the Developer Portal](imgs/connect-1.jpg)
 2. Under the `OAuth2 tab`, take a note of the Client ID as it will be used in step 5  
-![](imgs/connecting-2.jpg)
+![](imgs/connect-2.jpg)
 3. On the left panel, click the `Bot` category then name it, give it a profile picture, etc. Scroll down and then: 
      - Enable the "Server Members Intent" option under the "Privileged Gateway Intents"
          if you intend on enabling the config values [`CHECK_VOICE_WAITING`](#modifying-the-config) or [`ALERT_ON_FIRST_JOIN`](#modifying-the-config)
      - Enable the "Message Content Intent" option as well so that the bot can read messages that are sent in [`LISTEN_CHANNELS`](#modifying-the-config)
-![](imgs/connecting-3.jpg)
+![](imgs/connect-3.jpg)
 4. Obtain your bot's Token by clicking the `Reset Token` button and save it for future reference (referred to as `SECRET_TOKEN` within the [configuration](#modifying-the-config) section).  
 **NOTE: The token is effectively your bot's password. Keep it secure and do not share it.**  
-![](imgs/connecting-4.jpg)
+![](imgs/connect-4.jpg)
 5. Open the following link in your preferred browser and after changing the `client_id` parameter in the url with the Client ID you saved from step 2
 ```bash
 # Swap out REPLACE_WITH_YOUR_CLIENT_ID with the correct Client ID from step 2
