@@ -1,7 +1,7 @@
 # QueueBot
 
 ![Banner Image](imgs/banner.jpg)
-
+ 
 QueueBot is an IRC-like bot for Discord. It is used to facilitate online Office Hours (hence the use of terms like "Instructor" and "TAs") by keeping track of students in a queue.
 
 ## Notes and Stuff
